@@ -1,0 +1,14 @@
+
+name:           aoc2018
+cabal-version:  >= 1.10
+
+source-repository head
+  type: git
+
+library
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+	  	split
+  default-language: Haskell2010
