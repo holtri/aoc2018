@@ -24,8 +24,3 @@ getcut :: [Integer] -> M.Map (Integer, Integer) [Integer]
 getcut [id,l_space,t_space,width,height] = M.fromList [((x,y), [id]) | x <- x_span, y <- y_span]
    where x_span = [l_space+1 .. l_space + width]
          y_span = [t_space + 1 .. t_space + height]
-
--- a = [1,1,3,4,4]::[Integer]
--- b = [2,3,1,4,4]::[Integer]
--- c = [3,5,5,2,3]::[Integer]
--- x = [a,b,c]
