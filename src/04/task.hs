@@ -6,19 +6,19 @@ main = do
    input <- readFile "src/04/input"
 
    let parsed_input = map parse $ sort $ lines input
-   let processed_log = sleeptimes parsed_input []
-   let split_minutes = [(worker_id, minute) | (worker_id, minutes) <- processed_log, minute <- minutes]
+       processed_log = sleeptimes parsed_input []
+       split_minutes = [(worker_id, minute) | (worker_id, minutes) <- processed_log, minute <- minutes]
 
-   let most_sleeping_id = fst . findMaxByValue $ M.toList $ M.fromListWith (+) $ map (\x -> (fst x, 1)) split_minutes
-   let minute_count = M.toList $ M.fromListWith (+) [(minute, 1) | (worker_id, minute) <- split_minutes, worker_id==most_sleeping_id]
+       most_sleeping_id = fst . findMaxByValue $ M.toList $ M.fromListWith (+) $ map (\x -> (fst x, 1)) split_minutes
+       minute_count = M.toList $ M.fromListWith (+) [(minute, 1) | (worker_id, minute) <- split_minutes, worker_id==most_sleeping_id]
 
-   let wid = read most_sleeping_id :: Integer
-   let top_min = fst $ findMaxByValue minute_count
+       wid = read most_sleeping_id :: Integer
+       top_min = fst $ findMaxByValue minute_count
    print ("Task 1: " ++ show (wid * top_min))
 
    let asleep_count = findMaxByValue $ M.toList $ M.fromListWith (+) $ map (\x -> (x, 1)) split_minutes
-   let wid = read $ fst . fst $ asleep_count :: Integer
-   let selected_min = snd . fst $ asleep_count
+       wid = read $ fst . fst $ asleep_count :: Integer
+       selected_min = snd . fst $ asleep_count
    print ("Task 2:" ++ show (wid * selected_min))
 
 findMaxByValue :: (Ord b) => [(a,b)] -> (a, b)
