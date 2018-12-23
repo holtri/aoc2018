@@ -8,9 +8,11 @@ main = do
    input <- readFile "src/06/input"
    let parsedInput = map parse $ lines input
        border = borderLocations parsedInput
-       candidates = M.toList $ M.fromListWith (+) [(x,1) | x <- mapLocations parsedInput, x `notElem` border]
+       candidates = M.toList $ M.fromListWith (+) [(x,1) | x <- mapLocations closestLocation parsedInput, x `notElem` border]
        maximum_space = maximum $ map snd candidates
    print ("Task 1: " ++ show maximum_space)
+   let num_safe_locations = length $ filter (<10000) $ mapLocations sumDistances parsedInput
+   print ("Task 2: " ++ show num_safe_locations)
 
 toTuple [x,y] = (x,y)
 
@@ -18,6 +20,8 @@ parse x = toTuple $ map (\x-> read x :: Integer) $ splitOn "," x
 
 dist :: (Integer, Integer) -> (Integer, Integer) -> Integer
 dist (x1,y1) (x2,y2) = abs (x1 - x2) + abs (y1 - y2)
+
+sumDistances (x,y) xs = sum $ map (dist (x,y)) xs
 
 closestLocation :: (Integer, Integer) -> [(Integer, Integer)] -> Integer
 closestLocation (x,y) xs =
@@ -34,8 +38,8 @@ boundingBox xs =
         y_max =  maximum $ map snd xs
     in (x_min,x_max,y_min,y_max)
 
-mapLocations xs =
-   [closestLocation (x,y) xs | x <- [x_min..x_max], y <- [y_min..y_max]]
+mapLocations f xs =
+   [f (x,y) xs | x <- [x_min..x_max], y <- [y_min..y_max]]
    where (x_min,x_max,y_min,y_max) = boundingBox xs
 
 borderLocations :: [(Integer, Integer)] -> [Integer]
@@ -43,5 +47,3 @@ borderLocations xs =
       nub $ [closestLocation (x, y) xs | x <- [x_min..x_max], y <- [y_min, y_max]] ++
       [closestLocation (x, y) xs | x <- [x_min, x_max], y <- [y_min..y_max]]
       where (x_min,x_max,y_min,y_max) = boundingBox xs
-
-tmp = [(1, 1), (1, 6), (8, 3), (3, 4), (5, 5), (8, 9)]
