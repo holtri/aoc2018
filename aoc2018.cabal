@@ -34,5 +34,6 @@ library
       split,
       containers,
       time,
-      text  
+      text,
+      ListZipper
   default-language: Haskell2010
