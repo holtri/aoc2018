@@ -35,5 +35,6 @@ library
       containers,
       time,
       text,
-      ListZipper
+      ListZipper,
+      regex-posix
   default-language: Haskell2010
