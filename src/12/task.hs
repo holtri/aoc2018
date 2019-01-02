@@ -10,14 +10,24 @@ main :: IO ()
 main = do
   input <- readFile "src/12/input"
   let spreadPlan = S.fromList [head x | x <- words <$> lines input, last x /= "."]
-      task1 = run spreadPlan 20 (initialState, 0)
-  print ("Task 1: " ++ show (potSum task1))
+      n = 20
+      fps = finalPotSum $ run spreadPlan n ([],0) (initialState, 0)
+  print ("Task 1: " ++ show fps)
+  let n = 50000000000
+      fps = finalPotSum $ run spreadPlan n ([],0) (initialState, 0)
+  print ("Task 2: " ++ show fps)
 
-potSum (finalGen, offset) = sum $ map (+ offset) $ elemIndices '#' finalGen
+finalPotSum (xs, i, diff, n') = potSum (xs, i) + diff * n'
 
-run :: S.Set String -> Int -> (String, Int) -> (String, Int)
-run spreadPlan 0 (xs, i) = (xs,i)
-run spreadPlan n (xs, i) = run spreadPlan (n-1) (nextGen spreadPlan xs i)
+potSum (gen, offset) = sum $ map (+ offset) $ elemIndices '#' gen
+
+run :: S.Set String -> Int -> (String, Int) -> (String, Int) -> (String, Int, Int, Int)
+run spreadPlan n (xs', i') (xs, i)
+   | xs' == xs || n == 0= (xs, i, ps - ps', n)
+   | otherwise = f
+   where ps = potSum (xs, i)
+         ps' = potSum (xs', i')
+         f = run spreadPlan (n-1) (xs, i) (nextGen spreadPlan xs i)
 
 nextGen :: S.Set String -> String -> Int -> (String, Int)
 nextGen spreadPlan xs i
